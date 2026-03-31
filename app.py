@@ -1,24 +1,25 @@
-# Flask application with routes and score management
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-score = 0
-
+# Home route
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/score')
-def get_score():
-    return jsonify(score=score)
+# API endpoint for ranking
+@app.route('/api/rank', methods=['POST'])
+def rank():
+    data = request.get_json()
+    # process ranking logic here
+    return {'status': 'success', 'rank': data['rank']}
 
-@app.route('/update_score', methods=['POST'])
-def update_score():
-    global score
-    # Logic to update the score
-    score += 10  # Example increment
-    return jsonify(score=score)
+# API endpoint for score saving
+@app.route('/api/save_score', methods=['POST'])
+def save_score():
+    data = request.get_json()
+    # process score saving logic here
+    return {'status': 'success', 'score_saved': data['score']}
 
 if __name__ == '__main__':
     app.run(debug=True)
